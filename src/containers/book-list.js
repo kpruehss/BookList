@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { selectBook } from '../actions/index';
+import { bindActionCreators } from 'redux';
 
 class BookList extends Component {
   renderList() {
@@ -19,11 +21,19 @@ class BookList extends Component {
   }
 }
 
+// whatever is returned will show up as props inside BookList
 function mapStateToProps(state) {
-  // whatever is returned will show up as props inside BookList
   return {
     books: state.books
   };
 }
 
-export default connect(mapStateToProps)(BookList);
+// Anything returned from this function will end up as props on BookList
+function mapDispatchToProps(dispatch) {
+  // Whenever selectBook is called, the result should be passed to all reducers
+  return bindActionCreators({ selectBook: selectBook }, dispatch);
+}
+
+// Promote BookList from component to Container. It needs to know about
+// the dispatch method, selectBook (actions/index.js). Made available as prop
+export default connect(mapStateToProps, mapDispatchToProps)(BookList);
